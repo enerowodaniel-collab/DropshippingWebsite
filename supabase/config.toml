@@ -1,0 +1,11 @@
+[functions.ai-assistant]
+verify_jwt = false
+
+[functions.checkout-session]
+verify_jwt = false
+
+[functions.stripe-webhook]
+verify_jwt = false
+
+[functions.ai-product-generator]
+verify_jwt = true
