@@ -3,7 +3,7 @@ import { Sparkles, X } from 'lucide-react';
 
 const messages = [
   'Free shipping on all orders over $50 across Canada',
-  '30-day hassle-free returns on every purchase',
+  'Warranty support available — contact us for product issues',
   'New arrivals just dropped — explore the collection',
 ];
 
