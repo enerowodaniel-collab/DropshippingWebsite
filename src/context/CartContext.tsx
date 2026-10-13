@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from 'react';
+import { applyStorefrontCartOverride } from '@/lib/storefrontCatalog';
 import type { CartItem } from '@/types';
 
 interface CartContextValue {
@@ -19,7 +20,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
-      return stored ? JSON.parse(stored) : [];
+      return stored ? (JSON.parse(stored) as CartItem[]).map(applyStorefrontCartOverride) : [];
     } catch {
       return [];
     }
@@ -34,18 +35,19 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [items]);
 
   const addItem = useCallback((item: CartItem) => {
+    const currentItem = applyStorefrontCartOverride(item);
     setItems((prev) => {
       const existing = prev.find(
-        (i) => i.productId === item.productId && i.variantValue === item.variantValue
+        (i) => i.productId === currentItem.productId && i.variantValue === currentItem.variantValue
       );
       if (existing) {
         return prev.map((i) =>
-          i.productId === item.productId && i.variantValue === item.variantValue
-            ? { ...i, quantity: i.quantity + item.quantity }
+          i.productId === currentItem.productId && i.variantValue === currentItem.variantValue
+            ? { ...currentItem, quantity: i.quantity + currentItem.quantity }
             : i
         );
       }
-      return [...prev, item];
+      return [...prev, currentItem];
     });
   }, []);
 

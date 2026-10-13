@@ -23,6 +23,7 @@ export default async function handler(req, res) {
   try {
     const secretKey = getStripeSecretKey();
     const { items, email, shippingAddress } = req.body || {};
+    const requiredAddressFields = ["name", "address", "city", "province", "postalCode"];
     if (
       !Array.isArray(items) ||
       items.length < 1 ||
@@ -31,9 +32,14 @@ export default async function handler(req, res) {
       !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
       !shippingAddress ||
       typeof shippingAddress !== "object" ||
-      !["name", "address", "city", "province", "postalCode"].every((field) =>
-        typeof shippingAddress[field] === "string" && shippingAddress[field].trim()
-      )
+      !requiredAddressFields.every((field) =>
+        typeof shippingAddress[field] === "string" &&
+        shippingAddress[field].trim().length > 0 &&
+        shippingAddress[field].trim().length <= 200
+      ) ||
+      (shippingAddress.phone !== undefined &&
+        (typeof shippingAddress.phone !== "string" || shippingAddress.phone.length > 40)) ||
+      shippingAddress.country !== "Canada"
     ) {
       return sendJson(res, 400, { error: "Please check your contact, shipping, and cart details." });
     }
@@ -73,10 +79,13 @@ export default async function handler(req, res) {
     stripeParams.set("customer_email", email.trim());
     stripeParams.set("success_url", `${getRequestBaseUrl(req).origin}/checkout?session_id={CHECKOUT_SESSION_ID}`);
     stripeParams.set("cancel_url", `${getRequestBaseUrl(req).origin}/cart`);
-    stripeParams.set("shipping_address_collection[allowed_countries][0]", "CA");
-    stripeParams.set("phone_number_collection[enabled]", "true");
     stripeParams.set("metadata[customer_name]", shippingAddress.name.trim().slice(0, 200));
-    stripeParams.set("metadata[shipping_address]", JSON.stringify(shippingAddress).slice(0, 500));
+    stripeParams.set("metadata[shipping_address]", shippingAddress.address.trim());
+    stripeParams.set("metadata[shipping_city]", shippingAddress.city.trim());
+    stripeParams.set("metadata[shipping_province]", shippingAddress.province.trim());
+    stripeParams.set("metadata[shipping_postal_code]", shippingAddress.postalCode.trim());
+    stripeParams.set("metadata[shipping_country]", shippingAddress.country);
+    stripeParams.set("metadata[customer_phone]", (shippingAddress.phone || "").trim().slice(0, 40));
 
     lineItems.forEach((item, index) => {
       stripeParams.set(`line_items[${index}][price_data][currency]`, "cad");

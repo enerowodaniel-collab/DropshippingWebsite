@@ -1,10 +1,10 @@
 UPDATE products
 SET
-  name = 'Mini Bluetooth Speaker',
+  name = 'JBL Mini Speaker',
   short_description = 'Portable Bluetooth speaker with rich sound and a compact design.',
   description = 'Take your music anywhere with this compact portable Bluetooth speaker. Its textured cylindrical design and rechargeable battery make it a great companion at home or on the go.',
   price = 55.00,
-  images = ARRAY['/products/mini-bluetooth-speaker.png'],
+  images = ARRAY['/products/jbl-mini-speaker.jpg'],
   updated_at = now()
 WHERE slug = 'pulse-mini-bluetooth-speaker';
 
@@ -19,5 +19,6 @@ WHERE slug = 'chargepad-pro-wireless-charger';
 UPDATE products
 SET
   price = 92.68,
+  images = ARRAY['/products/sony-headphones.jpg'],
   updated_at = now()
 WHERE slug = 'studio-over-ear-headphones';

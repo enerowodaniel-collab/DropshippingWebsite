@@ -47,23 +47,23 @@ export function CheckoutPage() {
       })
       .then((data) => {
         if (cancelled) return;
-      if (data?.paymentStatus !== 'paid') {
-        setError('Stripe has not confirmed this payment. If you completed checkout, please contact us before trying again.');
-        setStep('payment');
-        return;
-      }
-      clearCart();
-      setStep('success');
+        if (data?.paymentStatus !== 'paid') {
+          setError('Stripe has not confirmed this payment. If you completed checkout, please contact us before trying again.');
+          setStep('payment');
+          return;
+        }
+        clearCart();
+        setStep('success');
       })
       .catch((verificationError: unknown) => {
-      if (cancelled) return;
-      setError(verificationError instanceof Error
-        ? verificationError.message
-        : 'We could not verify your payment. Please contact us before trying again.');
-      setStep('payment');
+        if (cancelled) return;
+        setError(verificationError instanceof Error
+          ? verificationError.message
+          : 'We could not verify your payment. Please contact us before trying again.');
+        setStep('payment');
       })
       .finally(() => {
-      if (!cancelled) setLoading(false);
+        if (!cancelled) setLoading(false);
       });
 
     return () => {

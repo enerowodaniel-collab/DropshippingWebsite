@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import { applyStorefrontProductOverrides } from '@/lib/storefrontCatalog';
 import type { Product, Category } from '@/types';
 
 export function useProducts() {
@@ -15,7 +16,7 @@ export function useProducts() {
         .eq('status', 'active')
         .order('sort_order', { ascending: true });
       if (error) setError(error.message);
-      else setProducts(data ?? []);
+      else setProducts((data ?? []).map(applyStorefrontProductOverrides));
       setLoading(false);
     })();
   }, []);
@@ -35,7 +36,7 @@ export function useBestSellers() {
         .eq('status', 'active')
         .eq('is_best_seller', true)
         .order('sort_order', { ascending: true });
-      setProducts(data ?? []);
+      setProducts((data ?? []).map(applyStorefrontProductOverrides));
       setLoading(false);
     })();
   }, []);
@@ -55,7 +56,7 @@ export function useNewArrivals() {
         .eq('status', 'active')
         .eq('is_new_arrival', true)
         .order('sort_order', { ascending: true });
-      setProducts(data ?? []);
+      setProducts((data ?? []).map(applyStorefrontProductOverrides));
       setLoading(false);
     })();
   }, []);
@@ -101,7 +102,7 @@ export function useProduct(slug: string | undefined) {
       } else if (!data) {
         setError('Product not found');
       } else {
-        setProduct(data as Product);
+        setProduct(applyStorefrontProductOverrides(data as Product));
         const { data: variantsData } = await supabase
           .from('product_variants')
           .select('*')
@@ -129,7 +130,7 @@ export function useRelatedProducts(product: Product | null) {
         .eq('category_id', product.category_id)
         .neq('id', product.id)
         .limit(4);
-      setProducts(data ?? []);
+      setProducts((data ?? []).map(applyStorefrontProductOverrides));
       setLoading(false);
     })();
   }, [product]);

@@ -51,6 +51,16 @@ async function sendOrderEmail(session, stripeSecretKey) {
       _template: "table",
       customer_name: session.shipping_details?.name || session.customer_details?.name || session.metadata?.customer_name || "",
       customer_email: session.customer_details?.email || session.customer_email || "",
+      customer_phone: session.metadata?.customer_phone || "",
+      shipping_address: [
+        session.metadata?.shipping_address,
+        [
+          session.metadata?.shipping_city,
+          session.metadata?.shipping_province,
+          session.metadata?.shipping_postal_code,
+        ].filter(Boolean).join(", "),
+        session.metadata?.shipping_country,
+      ].filter(Boolean).join("\n"),
       items_ordered: orderedItems,
       order_total_cad: `$${((session.amount_total || 0) / 100).toFixed(2)} CAD`,
     }),
