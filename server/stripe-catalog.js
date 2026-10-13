@@ -14,7 +14,7 @@ export const PRODUCTS = {
     variants: { "Matte Black": 0, "Warm White": 0 },
   },
   "pulse-mini-bluetooth-speaker": {
-    name: "Mini Bluetooth Speaker",
+    name: "JBL Mini Speaker",
     price: 5500,
     variants: { "Ocean Blue": 0, Charcoal: 0 },
   },
