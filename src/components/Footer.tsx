@@ -12,7 +12,6 @@ export function Footer() {
 
   const helpLinks = [
     { label: 'Shipping Policy', path: '/legal/shipping' },
-    { label: 'Return & Refund Policy', path: '/legal/returns' },
     { label: 'Privacy Policy', path: '/legal/privacy' },
     { label: 'Terms of Service', path: '/legal/terms' },
     { label: 'FAQ', path: '/faq' },

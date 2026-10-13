@@ -4,7 +4,6 @@ import { AlertCircle, CheckCircle, CreditCard, Loader2, Lock } from 'lucide-reac
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import { formatPrice } from '@/lib/format';
-import { supabase } from '@/lib/supabase';
 
 type CheckoutStep = 'info' | 'payment' | 'success' | 'setup' | 'verifying';
 
@@ -40,11 +39,14 @@ export function CheckoutPage() {
     setLoading(true);
     setError('');
 
-    supabase.functions.invoke('checkout-session', {
-      body: { action: 'verify', sessionId },
-    }).then(({ data, error: invocationError }) => {
-      if (cancelled) return;
-      if (invocationError) throw invocationError;
+    fetch(`/api/verify-checkout?session_id=${encodeURIComponent(sessionId)}`)
+      .then(async (response) => {
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'We could not verify your payment yet.');
+        return data;
+      })
+      .then((data) => {
+        if (cancelled) return;
       if (data?.paymentStatus !== 'paid') {
         setError('Stripe has not confirmed this payment. If you completed checkout, please contact us before trying again.');
         setStep('payment');
@@ -52,15 +54,17 @@ export function CheckoutPage() {
       }
       clearCart();
       setStep('success');
-    }).catch((verificationError: unknown) => {
+      })
+      .catch((verificationError: unknown) => {
       if (cancelled) return;
       setError(verificationError instanceof Error
         ? verificationError.message
         : 'We could not verify your payment. Please contact us before trying again.');
       setStep('payment');
-    }).finally(() => {
+      })
+      .finally(() => {
       if (!cancelled) setLoading(false);
-    });
+      });
 
     return () => {
       cancelled = true;
@@ -78,10 +82,12 @@ export function CheckoutPage() {
     setError('');
 
     try {
-      const { data, error: invocationError } = await supabase.functions.invoke('checkout-session', {
-        body: {
-          items: items.map(({ productId, quantity, variantValue }) => ({
-            productId,
+      const response = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: items.map(({ slug, quantity, variantValue }) => ({
+            slug,
             quantity,
             variantValue,
           })),
@@ -95,13 +101,15 @@ export function CheckoutPage() {
             postalCode: form.postalCode,
             country: form.country,
           },
-        },
+        }),
       });
-
-      if (invocationError) throw invocationError;
-      if (data?.requiresSetup) {
-        setStep('setup');
-        return;
+      const data = await response.json();
+      if (!response.ok) {
+        if (response.status === 503 && data?.requiresSetup) {
+          setStep('setup');
+          return;
+        }
+        throw new Error(data?.error || 'Payment failed. Please try again.');
       }
       if (data?.url) {
         window.location.assign(data.url);
@@ -155,16 +163,16 @@ export function CheckoutPage() {
         </div>
         <h1 className="mt-4 text-2xl font-bold text-neutral-900">Payment Setup Required</h1>
         <p className="mx-auto mt-2 max-w-md text-sm text-neutral-600">
-          Stripe keys belong in secure Supabase Edge Function secrets, not in a database table or website code.
+          Stripe keys must be added to your Vercel project's environment variables before checkout can be enabled.
         </p>
         <div className="mx-auto mt-6 max-w-md rounded-lg border border-neutral-200 p-4 text-left">
           <h2 className="text-sm font-semibold text-neutral-900">What is needed:</h2>
           <ul className="mt-2 space-y-2 text-sm text-neutral-600">
             <li>1. Create a Stripe account at stripe.com</li>
-            <li>2. Run npm run stripe:deploy to deploy checkout and create the webhook endpoint URL</li>
-            <li>3. Subscribe the Stripe webhook to checkout.session.completed and checkout.session.async_payment_succeeded</li>
-            <li>4. Add STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET under Supabase Dashboard → Edge Functions → Secrets</li>
-            <li>5. Confirm FormSubmit's one-time email at frncspls@gmail.com, then test with Stripe test cards</li>
+            <li>2. Add STRIPE_SECRET_KEY in Vercel → Project Settings → Environment Variables</li>
+            <li>3. Deploy the site, then add the /api/stripe-webhook URL in Stripe</li>
+            <li>4. Add STRIPE_WEBHOOK_SECRET in Vercel and redeploy</li>
+            <li>5. Confirm FormSubmit's one-time email at frncspls@gmail.com</li>
           </ul>
         </div>
         <div className="mt-6 flex justify-center">

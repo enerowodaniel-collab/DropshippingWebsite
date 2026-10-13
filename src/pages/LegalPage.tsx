@@ -38,18 +38,6 @@ const legalContent: Record<string, { title: string; lastUpdated: string; section
       { heading: 'Shipping Issues', body: 'If your package is lost, damaged, or delayed, please contact us at support@novashop.ca. We will work with the carrier to resolve the issue as quickly as possible.' },
     ],
   },
-  returns: {
-    title: 'Refund and Return Policy',
-    lastUpdated: 'October 2026',
-    sections: [
-      { heading: 'Return Period', body: 'You may return any item within 30 days of delivery for a full refund. Items must be in their original condition with all packaging and accessories included.' },
-      { heading: 'How to Initiate a Return', body: 'To start a return, contact us at support@novashop.ca with your order number and the reason for return. We will provide return instructions and a return authorization.' },
-      { heading: 'Refund Processing', body: 'Refunds are processed within 5 business days of receiving the returned item. The refund will be credited to your original payment method. Processing time may vary depending on your bank.' },
-      { heading: 'Return Shipping Costs', body: 'Return shipping costs are the responsibility of the customer, unless the item is defective or we shipped the wrong product. In such cases, we will provide a prepaid return label.' },
-      { heading: 'Non-Returnable Items', body: 'Certain items cannot be returned for hygiene or safety reasons. This includes opened earbuds with ear tips and items that have been personally used or modified.' },
-      { heading: 'Exchanges', body: 'We do not offer direct exchanges. To exchange an item, please return the original item for a refund and place a new order for the desired product.' },
-    ],
-  },
 };
 
 export function LegalPage() {

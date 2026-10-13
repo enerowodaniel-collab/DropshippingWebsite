@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import {
-  Heart, ShoppingBag, Minus, Plus, Truck, RefreshCw, ShieldCheck,
+  Heart, ShoppingBag, Minus, Plus, Truck, ShieldCheck,
   ChevronRight, Loader2, Star, Check, Minus as MinusIcon,
 } from 'lucide-react';
 import { useProduct, useRelatedProducts, useProductReviews } from '@/lib/hooks';
@@ -259,14 +259,10 @@ export function ProductPage() {
             </div>
 
             {/* Trust badges */}
-            <div className="grid grid-cols-3 gap-3 border-t border-neutral-200 pt-4">
+            <div className="grid grid-cols-2 gap-3 border-t border-neutral-200 pt-4">
               <div className="flex flex-col items-center text-center gap-1">
                 <Truck className="h-5 w-5 text-primary-600" />
                 <p className="text-xs text-neutral-600">Free shipping over $50</p>
-              </div>
-              <div className="flex flex-col items-center text-center gap-1">
-                <RefreshCw className="h-5 w-5 text-primary-600" />
-                <p className="text-xs text-neutral-600">30-day returns</p>
               </div>
               <div className="flex flex-col items-center text-center gap-1">
                 <ShieldCheck className="h-5 w-5 text-primary-600" />
@@ -282,7 +278,7 @@ export function ProductPage() {
             {[
               { id: 'description', label: 'Description' },
               { id: 'specs', label: 'Specifications' },
-              { id: 'shipping', label: 'Shipping & Returns' },
+              { id: 'shipping', label: 'Shipping' },
               { id: 'faq', label: 'FAQ' },
             ].map((tab) => (
               <button
@@ -338,14 +334,8 @@ export function ProductPage() {
 
             {activeTab === 'shipping' && (
               <div className="max-w-3xl space-y-4 text-sm text-neutral-700">
-                <div>
-                  <h3 className="font-semibold text-neutral-900 mb-1">Shipping</h3>
-                  <p>{product.shipping_info || 'Free shipping on orders over $50. Standard shipping 3-7 business days across Canada.'}</p>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-neutral-900 mb-1">Returns</h3>
-                  <p>We offer a 30-day return policy. If you are not satisfied with your purchase, you can return it for a full refund. Items must be in original condition. Return shipping costs are the responsibility of the customer unless the item is defective.</p>
-                </div>
+                <h3 className="font-semibold text-neutral-900">Shipping</h3>
+                <p>{product.shipping_info || 'Free shipping on orders over $50. Standard shipping 3-7 business days across Canada.'}</p>
               </div>
             )}
 
@@ -354,7 +344,7 @@ export function ProductPage() {
                 {[
                   { q: 'Is this product in stock?', a: product.stock_status === 'in_stock' ? 'Yes, this product is currently in stock and ready to ship.' : 'This product is currently out of stock. Please check back soon.' },
                   { q: 'How long does shipping take?', a: 'Orders typically ship within 1-3 business days. Standard delivery takes 3-7 business days across Canada.' },
-                  { q: 'What is your return policy?', a: 'We offer 30-day returns on all products. Items must be in original condition with all packaging.' },
+                  { q: 'What if there is a problem with my order?', a: 'Please contact our support team with your order number and details so we can help.' },
                   { q: 'Do you ship internationally?', a: 'Currently, we only ship within Canada. We are working on expanding to other regions.' },
                 ].map((faq, i) => (
                   <div key={i} className="rounded-lg border border-neutral-200 p-4">

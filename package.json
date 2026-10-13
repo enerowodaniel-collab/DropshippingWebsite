@@ -8,9 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit -p tsconfig.app.json",
-    "stripe:deploy": "supabase db push && supabase functions deploy checkout-session && supabase functions deploy stripe-webhook",
-    "stripe:secrets": "supabase secrets set --env-file ./supabase/functions/.env"
+    "typecheck": "tsc --noEmit -p tsconfig.app.json"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.57.4",

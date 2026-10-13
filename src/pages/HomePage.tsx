@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, Truck, ShieldCheck, Headphones, RefreshCw, Sparkles, Search } from 'lucide-react';
+import { ArrowRight, Truck, ShieldCheck, Headphones, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 import { useBestSellers, useCategories, useNewArrivals } from '@/lib/hooks';
 import { ProductCard } from '@/components/ProductCard';
@@ -41,10 +41,6 @@ export function HomePage() {
               <div className="flex items-center gap-2 text-sm text-neutral-600">
                 <Truck className="h-5 w-5 text-primary-600" />
                 Free shipping over $50
-              </div>
-              <div className="flex items-center gap-2 text-sm text-neutral-600">
-                <RefreshCw className="h-5 w-5 text-primary-600" />
-                30-day returns
               </div>
             </div>
           </div>
@@ -139,11 +135,10 @@ export function HomePage() {
             reliability. Here is what you can expect when you shop with us.
           </p>
         </div>
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {[
             { icon: ShieldCheck, title: 'Quality Verified', desc: 'Every product is tested and vetted before it reaches our store.' },
             { icon: Truck, title: 'Fast Shipping', desc: 'Orders ship within 1-3 business days with tracking provided.' },
-            { icon: RefreshCw, title: 'Easy Returns', desc: 'Not satisfied? Return any item within 30 days for a full refund.' },
             { icon: Headphones, title: 'Customer Support', desc: 'Our team is available to help with any questions or concerns.' },
           ].map((feature) => (
             <div key={feature.title} className="rounded-xl border border-neutral-200 p-6 text-center">

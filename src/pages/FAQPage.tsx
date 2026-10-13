@@ -4,7 +4,7 @@ import { ChevronDown } from 'lucide-react';
 const faqs = [
   { q: 'How long does shipping take?', a: 'Orders typically ship within 1-3 business days. Standard delivery takes 3-7 business days across Canada. You will receive a tracking number once your order ships.' },
   { q: 'Do you offer free shipping?', a: 'Yes, we offer free shipping on all orders over $50 within Canada. Orders under $50 have a flat shipping rate of $5.' },
-  { q: 'What is your return policy?', a: 'We offer a 30-day return policy on all products. Items must be in original condition with all packaging included. Return shipping costs are the responsibility of the customer unless the item is defective.' },
+  { q: 'What if there is a problem with my order?', a: 'Please contact our support team with your order number and details so we can help.' },
   { q: 'How do I track my order?', a: 'Once your order ships, you will receive an email with a tracking number. You can also view your order status in your account page.' },
   { q: 'Do you ship internationally?', a: 'Currently, we only ship within Canada. We are working on expanding to other regions and will announce international shipping when available.' },
   { q: 'What payment methods do you accept?', a: 'We accept all major credit cards through our secure payment processor, Stripe. Your payment information is encrypted and never stored on our servers.' },
