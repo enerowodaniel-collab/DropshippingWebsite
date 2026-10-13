@@ -50,7 +50,7 @@ export function AboutPage() {
             {[
               { icon: ShieldCheck, title: 'Quality First', desc: 'We vet every product before it reaches our store.' },
               { icon: Truck, title: 'Reliable Shipping', desc: 'Fast, tracked shipping across Canada with care.' },
-              { icon: RefreshCw, title: 'Honest Returns', desc: '30-day returns with no hassle and no questions.' },
+              { icon: RefreshCw, title: 'Support & Warranty', desc: 'Contact our team for warranty claims and product issues.' },
               { icon: Headphones, title: 'Real Support', desc: 'A dedicated team ready to help when you need it.' },
             ].map((v) => (
               <div key={v.title} className="rounded-xl bg-white p-6 text-center border border-neutral-200">
